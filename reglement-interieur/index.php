@@ -1,0 +1,16 @@
+<?php
+require dirname(__DIR__) . '/_lp/bootstrap.php';
+page_start('Règlement intérieur', 'Règlement intérieur applicable aux stagiaires des formations Lead Performant.', '', true, '/reglement-interieur/');
+?>
+<section class="page-hero"><div class="wrap"><?= crumbs(['Règlement intérieur' => null]) ?><h1 class="pf-h1">Règlement intérieur applicable aux stagiaires</h1><p class="pf-note">Articles L6352-3 et R6352-1 à R6352-15 du Code du travail.</p></div></section>
+<section class="section paper"><div class="wrap pf-narrow pf-card" style="line-height:1.7">
+<h2 class="pf-h2">Article 1 · Objet et champ d’application</h2><p>Le présent règlement s’applique à toute personne inscrite à une action de formation organisée par Lead Performant, pour toute la durée de la formation, en présentiel comme à distance. Lorsque la formation se déroule dans des locaux extérieurs, les règles d’hygiène et de sécurité de l’établissement d’accueil s’appliquent également.</p>
+<h2 class="pf-h2">Article 2 · Hygiène et sécurité</h2><p>Chaque stagiaire respecte les consignes d’hygiène, de sécurité et d’évacuation du lieu de formation. Il est interdit de fumer ou de vapoter dans les salles, d’y introduire des boissons alcoolisées ou de s’y présenter en état d’ébriété. Tout accident survenu pendant la formation ou le trajet est signalé sans délai au formateur.</p>
+<h2 class="pf-h2">Article 3 · Horaires, assiduité et émargement</h2><p>Les stagiaires respectent les horaires indiqués dans la convocation. Ils signent la feuille d’émargement par demi-journée, en présentiel ou par voie électronique à distance. Toute absence ou tout retard est signalé au formateur et justifié ; l’employeur en est informé lorsque la formation est financée par lui.</p>
+<h2 class="pf-h2">Article 4 · Comportement</h2><p>Chacun adopte une attitude respectueuse envers le formateur et les autres participants. Les échanges, situations et prises de parole partagés pendant la formation sont confidentiels. Les enregistrements vidéo réalisés à des fins pédagogiques ne sont utilisés qu’avec l’accord des personnes filmées et ne sont pas diffusés hors du groupe.</p>
+<h2 class="pf-h2">Article 5 · Matériel et supports</h2><p>Le stagiaire prend soin du matériel mis à sa disposition. Les supports remis sont réservés à son usage personnel ; leur reproduction ou leur diffusion est interdite.</p>
+<h2 class="pf-h2">Article 6 · Sanctions</h2><p>Tout manquement au présent règlement peut donner lieu, selon sa gravité, à un avertissement écrit ou à une exclusion temporaire ou définitive de la formation. Aucune sanction n’est prise sans que le stagiaire ait été informé des griefs retenus contre lui et ait pu s’expliquer, le cas échéant assisté de la personne de son choix ; la décision motivée lui est notifiée par écrit. L’employeur et, le cas échéant, le financeur sont informés de la sanction prise.</p>
+<h2 class="pf-h2">Article 7 · Réclamations</h2><p>Toute réclamation relative au déroulement de la formation peut être adressée à <?= h(ORG['email']) ?> ; une réponse est apportée sous quinze jours.</p>
+<h2 class="pf-h2">Article 8 · Publicité</h2><p>Le présent règlement est remis à chaque stagiaire avant son entrée en formation et publié sur le site de Lead Performant.</p>
+</div></section>
+<?php page_end();
