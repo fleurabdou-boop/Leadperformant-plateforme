@@ -131,6 +131,19 @@ if ($P) switch ($v . ':' . $act) {
   case 'parametres:save':
     foreach (['nda', 'nda_region', 'parole_lieu_defaut', 'visio_outil', 'fermeture_particuliers_jours', 'fermeture_entreprises_jours', 'decision_maintien_jours', 'presque_complete', 'delai_retractation_jours', 'delai_acompte_heures', 'delai_entreprise_jours', 'delai_invitation_heures', 'acces_telechargement_jours', 'max_telechargements'] as $k) param_set($k, post($k, 600));
     journal('admin', 'parametres'); a_flash('Paramètres enregistrés.'); a_go('v=parametres');
+
+  case 'parametres:secrets':
+    foreach (['secret_stripe' => '/^(sk|rk)_(test|live)_[A-Za-z0-9]+$/', 'secret_stripe_webhook' => '/^whsec_[A-Za-z0-9]+$/', 'secret_smtp' => '/^.{4,200}$/'] as $k => $re) {
+      $val = trim((string)($_POST[$k] ?? ''));
+      if ($val === '') continue;                                   // champ laissé vide : valeur inchangée
+      if ($val === 'effacer') { param_set($k, ''); continue; }
+      if (!preg_match($re, $val)) throw new DomainException('Format non reconnu pour ' . ['secret_stripe' => 'la clé secrète Stripe', 'secret_stripe_webhook' => 'le secret de signature Stripe', 'secret_smtp' => 'le mot de passe de la boîte'][$k] . '.');
+      param_set($k, $val);
+    }
+    if (in_array(post('mail_transport'), ['smtp', 'mail'], true)) param_set('mail_transport', post('mail_transport'));
+    $mf = mb_strtolower(line(post('mail_from', 190)));
+    if ($mf !== '' && $mf !== (string)cfg('mail.from')) { if (!is_email($mf) || !str_ends_with($mf, '@leadperformant.com')) throw new DomainException('L’adresse d’expédition doit appartenir au domaine leadperformant.com.'); param_set('mail_from', $mf); }
+    journal('admin', 'cles_modifiees'); a_flash('Réglages de paiement et de messagerie enregistrés.'); a_go('v=parametres');
 }
 } catch (DomainException $e) { a_flash($e->getMessage()); a_go('v=' . $v . ($id ? '&id=' . $id : '')); }
 
@@ -412,6 +425,7 @@ case 'parametres':
     . $f('delai_entreprise_jours', 'Blocage des places d’une demande entreprise (jours)', 'number') . $f('delai_invitation_heures', 'Validité d’une invitation de la liste d’attente (heures)', 'number')
     . $f('acces_telechargement_jours', 'Durée d’accès aux téléchargements (jours)', 'number') . $f('max_telechargements', 'Nombre de téléchargements autorisés', 'number')
     . '<div class="g-full"><button class="g-btn">Enregistrer</button></div></form></section>'
+    . a_secrets_card()
     . '<section class="g-card"><h2 class="g-h2">Sécurité</h2><p><a class="g-btn g-ghost" href="/gestion/?reset=1" onclick="return confirm(\'Vous serez déconnecté et recevrez un code par courriel.\')">Changer le mot de passe</a></p><p class="g-small">Dernière exécution des tâches planifiées : ' . h(param('taches_derniere', 'jamais')) . '</p></section>';
   a_layout_end(); break;
 

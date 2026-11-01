@@ -2,7 +2,14 @@
 /* Stripe : sessions de paiement (Checkout), remboursements, vérification des notifications signées.
    Mode « simulation » (clé commençant par sim_) : aucune connexion à Stripe, une page locale imite le paiement — réservé aux tests. */
 
-function stripe_simulation(): bool { return str_starts_with((string)cfg('stripe.secret'), 'sim_') || (string)cfg('stripe.secret') === ''; }
+function stripe_simulation(): bool {
+  $k = (string)cfg('stripe.secret');
+  if (cfg('env') === 'prod') return false;           // jamais de simulation en production
+  return $k === '' || str_starts_with($k, 'sim_');
+}
+/* Paiement en ligne opérationnel : clé Stripe réelle (sk_test_ ou sk_live_) ou simulation hors production. */
+function paiement_actif(): bool { return stripe_simulation() || preg_match('/^(sk|rk)_(test|live)_/', (string)cfg('stripe.secret')) === 1; }
+const PAIEMENT_INDISPONIBLE = 'Le paiement en ligne ouvre très prochainement. Votre demande est enregistrée : écrivez-nous à leadperformant@gmail.com et nous vous adresserons le lien de règlement.';
 
 function stripe_api(string $method, string $path, array $params = []): array {
   $ch = curl_init('https://api.stripe.com/v1/' . $path);
@@ -20,6 +27,7 @@ function stripe_api(string $method, string $path, array $params = []): array {
 
 /* Crée une page de paiement pour un montant donné. $ref = ['echeance' => id] ou ['commande' => id]. */
 function stripe_checkout(int $amount, string $label, string $email, array $ref, string $successUrl, string $cancelUrl, int $ttlMinutes = 60): array {
+  if (!paiement_actif()) throw new DomainException(PAIEMENT_INDISPONIBLE);
   if (stripe_simulation()) {
     $id = 'cs_sim_' . token(12);
     return ['id' => $id, 'url' => url('/paiement/simulation.php?cs=' . urlencode($id) . '&ref=' . urlencode(json_encode($ref)) . '&m=' . $amount . '&l=' . urlencode($label) . '&ok=' . urlencode($successUrl) . '&ko=' . urlencode($cancelUrl))];
@@ -42,6 +50,7 @@ function stripe_checkout(int $amount, string $label, string $email, array $ref, 
 
 function stripe_refund(string $paymentIntent, ?int $amount = null): string {
   if (stripe_simulation() || str_starts_with($paymentIntent, 'pi_sim_')) return 're_sim_' . token(8);
+  if (!paiement_actif()) throw new DomainException('Clé Stripe absente : remboursement à effectuer depuis le tableau de bord Stripe.');
   $p = ['payment_intent' => $paymentIntent]; if ($amount !== null) $p['amount'] = $amount;
   $r = stripe_api('POST', 'refunds', $p);
   return $r['id'];

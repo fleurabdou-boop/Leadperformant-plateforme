@@ -69,7 +69,7 @@ function a_layout_start(string $title, string $actif): void {
   $last = param('taches_derniere', '');
   if ($last === '' || ts($last) < time() - 3600) echo '<p class="g-msg">Les tâches planifiées n’ont pas tourné depuis plus d’une heure' . ($last ? ' (dernière exécution : ' . h(date('d/m H:i', ts($last))) . ')' : '') . ' : rappels et relances sont en attente.</p>';
 }
-function a_layout_end(): void { echo '</main></div></body></html>'; }
+function a_layout_end(): void { echo '</main></div></body></html>'; taches_opportunistes(); }
 function a_table(array $head, array $rows, string $empty = 'Aucun élément.'): string {
   if (!$rows) return '<p class="g-empty">' . h($empty) . '</p>';
   $o = '<div class="g-scroll"><table class="g-t"><thead><tr>'; foreach ($head as $hh) $o .= '<th>' . h($hh) . '</th>'; $o .= '</tr></thead><tbody>';
@@ -88,6 +88,21 @@ function a_select(string $name, string $label, array $opts, $value): string {
 function a_badge(string $statut): string {
   $ton = in_array($statut, ['confirmee', 'soldee', 'payee', 'ouverte', 'envoye'], true) ? 'ok' : (in_array($statut, ['retractee', 'expiree', 'annulee', 'remboursee', 'echec', 'abandonnee'], true) ? 'ko' : 'wait');
   return '<span class="g-b g-b-' . $ton . '">' . h(STATUTS_LIB[$statut] ?? ucfirst(str_replace('_', ' ', $statut))) . '</span>';
+}
+function a_masque(string $k): string { $v = (string)param($k, ''); return $v === '' ? 'non renseigné' : 'enregistré (…' . h(substr($v, -4)) . ')'; }
+function a_secrets_card(): string {
+  $k = (string)cfg('stripe.secret');
+  $etat = !paiement_actif() ? '<span class="g-b g-b-ko">Paiement en ligne inactif</span>' : (str_contains($k, '_live_') ? '<span class="g-b g-b-ok">Stripe en production</span>' : '<span class="g-b g-b-wait">Stripe en mode test</span>');
+  return '<section class="g-card"><h2 class="g-h2">Paiement et courriels</h2><p>' . $etat . '</p>'
+    . '<p class="g-small">Adresse de notification à déclarer dans Stripe (Développeurs, Webhooks, événements checkout.session.completed et checkout.session.async_payment_succeeded) : <code>' . h(url('/stripe/webhook.php')) . '</code></p>'
+    . '<form method="post" class="g-grid" autocomplete="off">' . a_field() . '<input type="hidden" name="a" value="secrets">'
+    . a_input('secret_stripe', 'Clé secrète Stripe (sk_test_… puis sk_live_…) — ' . a_masque('secret_stripe'), '', 'password', 'autocomplete="new-password"')
+    . a_input('secret_stripe_webhook', 'Secret de signature du webhook (whsec_…) — ' . a_masque('secret_stripe_webhook'), '', 'password', 'autocomplete="new-password"')
+    . a_input('mail_from', 'Adresse d’expédition des courriels', (string)cfg('mail.from'), 'email')
+    . a_input('secret_smtp', 'Mot de passe de la boîte ' . h((string)cfg('mail.from')) . ' — ' . a_masque('secret_smtp'), '', 'password', 'autocomplete="new-password"')
+    . a_select('mail_transport', 'Envoi des courriels', ['mail' => 'Serveur du site (fonction mail)', 'smtp' => 'Boîte du domaine (SMTP authentifié, recommandé)'], (string)cfg('mail.transport'))
+    . '<p class="g-small g-full">Un champ laissé vide conserve la valeur enregistrée ; saisir « effacer » la supprime. Les valeurs ne sont jamais réaffichées.</p>'
+    . '<div class="g-full"><button class="g-btn">Enregistrer</button></div></form></section>';
 }
 function csv_out(string $name, array $head, array $rows): void {
   header('Content-Type: text/csv; charset=utf-8'); header('Content-Disposition: attachment; filename="' . $name . '-' . date('Ymd') . '.csv"');

@@ -89,3 +89,9 @@ set_exception_handler(function (Throwable $e) {
 
 foreach (['logs', 'docs', 'produits', 'uploads', 'outbox'] as $d) { if (!is_dir(LP_STORAGE . "/$d")) @mkdir(LP_STORAGE . "/$d", 0750, true); }
 db_migrate();
+
+/* Clés saisies dans le tableau de bord (Paramètres > Paiement et courriels) : elles priment sur le fichier de configuration. */
+foreach (['secret_stripe' => ['stripe', 'secret'], 'secret_stripe_webhook' => ['stripe', 'webhook_secret'], 'secret_smtp' => ['mail', 'smtp_pass'], 'mail_transport' => ['mail', 'transport'], 'mail_from' => ['mail', 'from']] as $pk => [$a, $b]) {
+  $pv = (string)param($pk, ''); if ($pv !== '') $GLOBALS['LP_CFG'][$a][$b] = $pv;
+}
+if (param('mail_from', '') !== '') $GLOBALS['LP_CFG']['mail']['smtp_user'] = param('mail_from');

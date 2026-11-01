@@ -68,6 +68,21 @@ function page_end(): void {
   echo '</main>' . footer_html() . '<div class="toast" id="toast" role="status" aria-live="polite"></div>'
     . '<script>window.LP=window.LP||{"contact":"/contact/","base":"/","site":"' . h(url('/')) . '","mode":"prod","preview":false,"single":false,"programmes":{}};</script>'
     . '<script src="/assets/lp/site.js" defer></script></body></html>';
+  taches_opportunistes();
+}
+/* Filet de sécurité : si le planificateur n'a pas tourné depuis 15 minutes, les tâches s'exécutent après l'envoi de la page. */
+function taches_opportunistes(): void {
+  if (PHP_SAPI === 'cli' || !empty($GLOBALS['LP_TACHES_PREVUES'])) return;
+  $last = (string)param('taches_derniere', '');
+  if ($last !== '' && ts($last) > time() - 900) return;
+  $GLOBALS['LP_TACHES_PREVUES'] = true;
+  register_shutdown_function(function () {
+    if (function_exists('fastcgi_finish_request')) @fastcgi_finish_request(); elseif (function_exists('litespeed_finish_request')) @litespeed_finish_request();
+    $fp = @fopen(LP_STORAGE . '/logs/taches.lock', 'c');
+    if (!$fp || !flock($fp, LOCK_EX | LOCK_NB)) return;
+    try { require_once LP_DIR . '/taches.php'; @set_time_limit(120); taches_run(); } catch (Throwable $e) { log_error('Tâches (filet) : ' . $e->getMessage()); }
+    flock($fp, LOCK_UN);
+  });
 }
 function crumbs(array $items): string {
   $out = '<nav class="crumbs" aria-label="Fil d’Ariane"><a href="/">Accueil</a>';

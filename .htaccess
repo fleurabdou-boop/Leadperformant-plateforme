@@ -1,0 +1,6 @@
+# Sources de la plateforme : rien n'est servi, sauf l'installateur protégé par jeton.
+Options -Indexes
+Require all denied
+<Files "installer.php">
+  Require all granted
+</Files>

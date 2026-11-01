@@ -10,6 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $email = mb_strtolower(line(post('email', 190)));
   $cr = $p['type'] === 'visio' ? (int)post('creneau') : null;
   if (!csrf_check() || post('site_web') !== '') $err = 'La page a expiré. Merci de recommencer.';
+  elseif (!paiement_actif()) $err = PAIEMENT_INDISPONIBLE;
   elseif (line(post('prenom', 100)) === '' || line(post('nom', 100)) === '' || !is_email($email)) $err = 'Merci d’indiquer vos prénom, nom et une adresse électronique valide.';
   elseif ($p['type'] === 'visio' && !$cr) $err = 'Merci de choisir un créneau.';
   elseif (post('accord') !== 'oui' || post('renonce') !== 'oui') $err = 'Merci de cocher les deux cases pour continuer.';
