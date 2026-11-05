@@ -61,7 +61,7 @@ $zz->close();
 ok('Sauvegarde : ' . $n . ' fichiers (' . round($taille / 1048576, 1) . ' Mo) dans ' . $zipf);
 
 /* ---------- 3. Copie des fichiers de la plateforme ---------- */
-$exclus = ['.git', '.htaccess', 'installer.php', 'htaccess-ajouts.conf', '.gitignore', 'README.md'];
+$exclus = ['.git', '.htaccess', 'installer.php', 'htaccess-ajouts.conf', '.gitignore', 'README.md', 'refonte', 'publier.php'];
 $copies = 0; $inchanges = 0; $conflits = [];
 $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($SRC, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST);
 $liste = [];
