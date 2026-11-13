@@ -15,7 +15,7 @@ function nav_html(string $actif = ''): string {
   <a class="m-feature m-item" style="--i:0" href="/leadership/"><div class="ph r43 "></div><span class="m-roman">II</span><span class="m-name">Leadership</span><span class="m-tag">Se connaître · Mobiliser · Faire agir</span></a>
   <div class="m-list"><span class="eyebrow">Les programmes du pôle II</span><a class="m-prog m-item" style="--i:1" href="/formations/leadership-relationnel/"><span class="num">04</span><span><b>Leadership relationnel et mobilisation</b><small>Comment faire grandir et mobiliser une équipe ?</small></span><span class="m-dur">2 jours</span></a><a class="m-prog m-item" style="--i:2" href="/formations/leadership-strategique/"><span class="num">05</span><span><b>Leadership stratégique et situations complexes</b><small>Comment agir quand la situation devient difficile ?</small></span><span class="m-dur">2 à 3 jours</span></a>
     <div class="m-foot m-item" style="--i:3"><a class="link" href="/leadership/">Entrer dans le pôle Leadership <span class="arrow" aria-hidden="true">→</span></a><a class="link" href="/leadership/#atelier">Atelier du leader</a></div></div>
-</div></div></div><span class="sep" aria-hidden="true"></span><div class="nav-item"><a class="nav-link" href="/formations/">Programmes</a></div><div class="nav-item"><a class="nav-link" href="/calendrier/"{$a('calendrier')}>Calendrier</a></div><div class="nav-item accent"><a class="nav-link" href="/interventions/">Mes interventions<span class="live" aria-hidden="true"></span></a></div><div class="nav-item"><a class="nav-link" href="/ressources/">Ressources</a></div><div class="nav-item"><a class="nav-link" href="/boutique/"{$a('boutique')}>Boutique</a></div><div class="nav-item"><a class="nav-link" href="/contact/">Contact</a></div><span class="nav-ink" aria-hidden="true"></span><a class="btn nav-cta" href="/contact/">Demander un échange</a></nav>
+</div></div></div><span class="sep" aria-hidden="true"></span><div class="nav-item"><a class="nav-link" href="/formations/">Programmes</a></div><div class="nav-item"><a class="nav-link" href="/calendrier/"{$a('calendrier')}>Calendrier</a></div><div class="nav-item accent"><a class="nav-link" href="/interventions/">Mes interventions<span class="live" aria-hidden="true"></span></a></div><div class="nav-item"><a class="nav-link" href="/ressources/">Ressources</a></div><div class="nav-item"><a class="nav-link" href="/boutique/"{$a('boutique')}>Boutique</a></div><span class="nav-ink" aria-hidden="true"></span><a class="btn nav-cta" href="/contact/">Demander un échange</a></nav>
     <a class="btn header-cta" href="/contact/">Demander un échange</a>
     <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav"><i></i><span>Menu</span></button>
   </div>
@@ -60,14 +60,14 @@ function page_start(string $title, string $description, string $actif = '', bool
     . '<meta name="theme-color" content="#21406A"><link rel="icon" type="image/png" href="/assets/img/favicon-lead-performant.png">'
     . '<link rel="preload" href="/assets/lp/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>'
     . '<link rel="preload" href="/assets/lp/fonts/manrope-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>'
-    . '<link rel="stylesheet" href="/assets/lp/site.css"><link rel="stylesheet" href="/assets/lp/plateforme.css?v=1">'
+    . '<link rel="stylesheet" href="/assets/lp/site.css?v=20261113"><link rel="stylesheet" href="/assets/lp/plateforme.css?v=1">'
     . ($jsonld ? '<script type="application/ld+json">' . $jsonld . '</script>' : '')
     . '</head><body><a class="skip" href="#contenu">Aller au contenu</a>' . nav_html($actif) . '<main id="contenu">';
 }
 function page_end(): void {
   echo '</main>' . footer_html() . '<div class="toast" id="toast" role="status" aria-live="polite"></div>'
     . '<script>window.LP=window.LP||{"contact":"/contact/","base":"/","site":"' . h(url('/')) . '","mode":"prod","preview":false,"single":false,"programmes":{}};</script>'
-    . '<script src="/assets/lp/site.js" defer></script></body></html>';
+    . '<script src="/assets/lp/site.js?v=20261113" defer></script></body></html>';
   taches_opportunistes();
 }
 /* Filet de sécurité : si le planificateur n'a pas tourné depuis 15 minutes, les tâches s'exécutent après l'envoi de la page. */
