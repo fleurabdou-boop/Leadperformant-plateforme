@@ -1,5 +1,5 @@
 <?php
-/* Lead Performant — réception des demandes (formulaire Contact et parcours Parole d'Impact).
+/* Lead Performant — réception des demandes (formulaire Contact, parcours Parole d'Impact, Boussole relationnelle).
    Envoie la demande au cabinet et un accusé de réception au demandeur.
    Réponse JSON : {"ok":true} ou {"ok":false,"error":"…"} */
 
@@ -28,13 +28,14 @@ $verrou = sys_get_temp_dir() . '/lp_' . md5($ip);
 if (is_file($verrou) && time() - filemtime($verrou) < 30) { http_response_code(429); fin(false, 'trop-rapide'); }
 @touch($verrou);
 
+$typeBrut = champ('type', 60);
 $nom     = ligne(champ('nom', 120));
+if ($typeBrut === 'boussole' && $nom === '') $nom = 'Répondant Boussole relationnelle';
 $email   = ligne(champ('email', 160));
 $message = champ('message', 6000);
 if ($nom === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || champ('consentement') !== 'oui') { http_response_code(422); fin(false, 'champs'); }
 
-$typeBrut = champ('type', 60);
-$type = $typeBrut === 'parcours-parole-d-impact' ? 'Parcours Parole d\'Impact' : ($typeBrut === 'diagnostic' ? 'Diagnostic d\'aisance orale' : ($typeBrut === 'programme' ? 'Fiche programme' : 'Formulaire de contact'));
+$type = $typeBrut === 'boussole' ? 'Boussole relationnelle' : ($typeBrut === 'parcours-parole-d-impact' ? 'Parcours Parole d\'Impact' : ($typeBrut === 'diagnostic' ? 'Diagnostic d\'aisance orale' : ($typeBrut === 'programme' ? 'Fiche programme' : 'Formulaire de contact')));
 $lignes = [
   'Origine'        => $type,
   'Nom'            => $nom,
@@ -61,6 +62,17 @@ if (!$envoye) { http_response_code(500); fin(false, 'envoi'); }
 
 /* Accusé de réception */
 $prenom = explode(' ', $nom)[0];
+if ($typeBrut === 'boussole') {
+  $ar = "Bonjour,\n\nVoici la copie de votre premier diagnostic, réalisé avec la Boussole relationnelle (version courte) sur leadperformant.com.\n\n"
+      . $message . "\n\n"
+      . "Ce premier diagnostic est indicatif. Il ne remplace ni l'évaluation réglementaire des risques psychosociaux, ni le DUERP, ni une enquête administrative ou disciplinaire.\n\n"
+      . "Pour en parler en toute confidentialité : répondez simplement à ce message, ou appelez le 06 62 57 92 74.\n\n"
+      . "Bien cordialement,\n\nAbdou Fleur\nLead Performant\nMédiation et gestion des conflits\nwww.leadperformant.com\n";
+  $entetesAR = "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n"
+             . "From: " . $enc('Lead Performant') . " <$EXPEDITEUR>\r\nReply-To: $DESTINATAIRE\r\n";
+  @mail($email, $enc('Votre premier diagnostic · Boussole relationnelle · Lead Performant'), $ar, $entetesAR, '-f' . $EXPEDITEUR);
+  fin(true);
+}
 if ($typeBrut === 'diagnostic') {
   $ar = "Bonjour $prenom,\n\nVoici la restitution de votre diagnostic d'aisance orale, réalisé sur leadperformant.com.\n\n"
       . $message . "\n\n"
@@ -73,9 +85,9 @@ if ($typeBrut === 'diagnostic') {
   fin(true);
 }
 $ar = "Bonjour $prenom,\n\nNous avons bien reçu votre demande et vous en remercions.\n\n"
-    . "Nous vous répondons sous deux jours ouvrés pour convenir d'un premier échange de trente minutes, gratuit et sans engagement.\n\n"
+    . "Nous vous répondons sous deux jours ouvrés pour convenir d'un premier échange de trente minutes, gratuit et sans engagement. Votre demande est traitée en toute confidentialité.\n\n"
     . "Pour toute précision, vous pouvez répondre directement à ce message ou nous appeler au 06 62 57 92 74.\n\n"
-    . "Bien cordialement,\n\nLead Performant\nArt oratoire et leadership\nwww.leadperformant.com\n";
+    . "Bien cordialement,\n\nLead Performant\nParler pour convaincre. Dialoguer pour apaiser.\nwww.leadperformant.com\n";
 $entetesAR = "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n"
            . "From: " . $enc('Lead Performant') . " <$EXPEDITEUR>\r\nReply-To: $DESTINATAIRE\r\n";
 @mail($email, $enc('Votre demande a bien été reçue · Lead Performant'), $ar, $entetesAR, '-f' . $EXPEDITEUR);

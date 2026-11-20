@@ -1,50 +1,16 @@
 <?php
-/* Gabarit des pages publiques : reprend l'en-tête, le menu et le pied de page du site existant (mêmes feuilles de style et scripts). */
+/* Gabarit des pages publiques : en-tête, menu et pied de page communs du site à deux pôles (mêmes feuilles de style et scripts). */
 
 function nav_html(string $actif = ''): string {
-  $a = fn($k) => $actif === $k ? ' aria-current="page"' : '';
-  return <<<HTML
-<header class="site-header" id="top">
-  <div class="wrap hbar">
-    <a class="brand" href="/" aria-label="Lead Performant, accueil"><img src="/assets/img/embleme-lead-performant.png" alt="" width="40" height="39"><span>LEAD PERFORMANT</span></a>
-    <nav class="nav" id="nav" aria-label="Navigation principale"><div class="nav-item has-mega is-pole" data-mega="art"><a class="nav-link" href="/art-oratoire/"><span class="r">I</span>Art oratoire</a><button type="button" class="mega-toggle" aria-expanded="false" aria-controls="mega-art" aria-label="Afficher le détail : Art oratoire"><svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></button><div class="mega" id="mega-art" role="region" aria-label="Pôle Art oratoire"><div class="wrap mega-grid">
-  <a class="m-feature m-item" style="--i:0" href="/art-oratoire/"><div class="ph r43 "></div><span class="m-roman">I</span><span class="m-name">Art oratoire</span><span class="m-tag">Oser parler · Convaincre · Marquer les esprits</span></a>
-  <div class="m-list"><span class="eyebrow">Les programmes du pôle I</span><a class="m-prog m-item" style="--i:1" href="/formations/eloquence-elite/"><span class="num">01</span><span><b>Éloquence Élite</b><small>Comment mieux prendre la parole ?</small></span><span class="m-dur">3 jours</span></a><a class="m-prog m-item" style="--i:2" href="/formations/eloquence-levier-professionnel/"><span class="num">02</span><span><b>L'Éloquence comme levier professionnel</b><small>Comment mieux me présenter pour évoluer ?</small></span><span class="m-dur">3 jours</span></a><a class="m-prog m-item" style="--i:3" href="/formations/parole-d-impact/"><span class="num">03</span><span><b>Parole d'Impact</b><small>Comment convaincre dans une situation décisive ?</small></span><span class="m-dur">2 à 3 jours</span></a>
-    <div class="m-foot m-item" style="--i:4"><a class="link" href="/art-oratoire/">Entrer dans le pôle Art oratoire <span class="arrow" aria-hidden="true">→</span></a><a class="link" href="/calendrier/">Calendrier des sessions</a></div></div>
-</div></div></div><div class="nav-item has-mega is-pole" data-mega="lead"><a class="nav-link" href="/leadership/"><span class="r">II</span>Leadership</a><button type="button" class="mega-toggle" aria-expanded="false" aria-controls="mega-lead" aria-label="Afficher le détail : Leadership"><svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></button><div class="mega" id="mega-lead" role="region" aria-label="Pôle Leadership"><div class="wrap mega-grid">
-  <a class="m-feature m-item" style="--i:0" href="/leadership/"><div class="ph r43 "></div><span class="m-roman">II</span><span class="m-name">Leadership</span><span class="m-tag">Se connaître · Mobiliser · Faire agir</span></a>
-  <div class="m-list"><span class="eyebrow">Les programmes du pôle II</span><a class="m-prog m-item" style="--i:1" href="/formations/leadership-relationnel/"><span class="num">04</span><span><b>Leadership relationnel et mobilisation</b><small>Comment faire grandir et mobiliser une équipe ?</small></span><span class="m-dur">2 jours</span></a><a class="m-prog m-item" style="--i:2" href="/formations/leadership-strategique/"><span class="num">05</span><span><b>Leadership stratégique et situations complexes</b><small>Comment agir quand la situation devient difficile ?</small></span><span class="m-dur">2 à 3 jours</span></a>
-    <div class="m-foot m-item" style="--i:3"><a class="link" href="/leadership/">Entrer dans le pôle Leadership <span class="arrow" aria-hidden="true">→</span></a><a class="link" href="/leadership/#atelier">Atelier du leader</a></div></div>
-</div></div></div><span class="sep" aria-hidden="true"></span><div class="nav-item"><a class="nav-link" href="/formations/">Programmes</a></div><div class="nav-item"><a class="nav-link" href="/calendrier/"{$a('calendrier')}>Calendrier</a></div><div class="nav-item accent"><a class="nav-link" href="/interventions/">Mes interventions<span class="live" aria-hidden="true"></span></a></div><div class="nav-item"><a class="nav-link" href="/ressources/">Ressources</a></div><div class="nav-item"><a class="nav-link" href="/boutique/"{$a('boutique')}>Boutique</a></div><span class="nav-ink" aria-hidden="true"></span><a class="btn nav-cta" href="/contact/">Demander un échange</a></nav>
-    <a class="btn header-cta" href="/contact/">Demander un échange</a>
-    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav"><i></i><span>Menu</span></button>
-  </div>
-</header>
-<div class="nav-backdrop" aria-hidden="true"></div>
+  // en-tête commun de la maison mère à deux pôles (novembre 2026)
+  return <<<'HTML'
+<header class="lp2-h" id="top"><div class="lp2-bar"><a class="lp2-brand" href="/" aria-label="Lead Performant, accueil"><svg width="38" height="38" viewBox="0 0 48 48" aria-hidden="true"><path d="M5.2 19.5 A19.4 19.4 0 0 1 42.8 19.5" fill="none" stroke="#C9A45C" stroke-width="2.6" stroke-linecap="round"></path><path d="M42.8 28.5 A19.4 19.4 0 0 1 5.2 28.5" fill="none" stroke="#F6F3EC" stroke-width="2.6" stroke-linecap="round"></path></svg><span class="lp2-brand-t"><span class="lp2-brand-n">LEAD PERFORMANT</span><span class="lp2-brand-s"><span>Parler pour convaincre.</span> <span>Dialoguer pour apaiser.</span></span></span></a><div class="lp2-act"><a class="lp2-tel" href="tel:+33662579274">06 62 57 92 74</a><a class="lp2-cta" href="/contact/">Demander un échange</a><button class="lp2-burger" type="button" aria-expanded="false" aria-controls="lp2-menu" aria-label="Ouvrir le menu"><svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true"><path d="M0 1h18M0 6h18M0 11h18" stroke="#F6F3EC" stroke-width="1.5"></path></svg><span>Menu</span></button></div></div><nav class="lp2-nav" aria-label="Navigation principale"><ul><li><a href="/art-oratoire-leadership/" data-k="pole1">Art oratoire et leadership</a></li><li><a href="/mediation-gestion-des-conflits/" data-k="pole2">Médiation et gestion des conflits</a></li><li><a href="/interventions/" data-k="interventions">Interventions et médias</a></li><li><a href="/ressources/" data-k="ressources">Ressources</a></li><li><a href="/fondateur/" data-k="fondateur">Le fondateur</a></li></ul></nav><nav class="lp2-menu" id="lp2-menu" aria-label="Menu mobile" hidden><ul><li><a href="/art-oratoire-leadership/" data-k="pole1">Art oratoire et leadership<span aria-hidden="true">→</span></a></li><li><a href="/mediation-gestion-des-conflits/" data-k="pole2">Médiation et gestion des conflits<span aria-hidden="true">→</span></a></li><li><a href="/interventions/" data-k="interventions">Interventions et médias<span aria-hidden="true">→</span></a></li><li><a href="/ressources/" data-k="ressources">Ressources<span aria-hidden="true">→</span></a></li><li><a href="/fondateur/" data-k="fondateur">Le fondateur<span aria-hidden="true">→</span></a></li></ul><a class="lp2-menu-cta" href="/contact/">Demander un échange</a><a class="lp2-menu-tel" href="tel:+33662579274">06 62 57 92 74</a></nav></header>
 HTML;
 }
 
 function footer_html(): string {
-  $y = date('Y');
-  return <<<HTML
-<footer class="site-footer">
-  <div class="wrap">
-    <div class="foot-grid">
-      <div class="foot-brand">
-        <a class="logo" href="/" aria-label="Lead Performant, accueil"><img src="/assets/img/logo-lead-performant.png" alt="Lead Performant" width="100" height="97"></a>
-        <p>Art oratoire et leadership. Formation, coaching et accompagnement pour celles et ceux qui doivent convaincre, fédérer et conduire le changement.</p>
-        <p class="foot-contact"><b>06 62 57 92 74</b>leadperformant@gmail.com</p>
-      </div>
-      <div><h2>Programmes</h2><ul><li><a href="/formations/eloquence-elite/">Éloquence Élite</a></li><li><a href="/formations/eloquence-levier-professionnel/">L'Éloquence comme levier professionnel</a></li><li><a href="/formations/parole-d-impact/">Parole d'Impact</a></li><li><a href="/formations/leadership-relationnel/">Leadership relationnel et mobilisation</a></li><li><a href="/formations/leadership-strategique/">Leadership stratégique</a></li><li><a href="/calendrier/">Calendrier des sessions</a></li></ul></div>
-      <div><h2>Pour qui</h2><ul><li><a href="/entreprises/">Entreprises</a></li><li><a href="/ecoles/">Écoles et universités</a></li><li><a href="/collectivites-institutions/">Collectivités et institutions</a></li><li><a href="/art-oratoire/#coaching">Particuliers</a></li><li><a href="/boutique/">Boutique</a></li></ul></div>
-      <div><h2>Le cabinet</h2><ul><li><a href="/interventions/">Interventions et médias</a></li><li><a href="/ressources/">Ressources</a></li><li><a href="/laboratoire.html">Laboratoire de la parole</a></li><li><a href="/contact/">Contact</a></li></ul></div>
-    </div>
-    <div class="foot-legal">
-      <span>© {$y} Lead Performant. Interventions en Île-de-France, en déplacement et à distance.</span>
-      <nav aria-label="Informations légales"><a href="/mentions-legales/">Mentions légales</a><a href="/cgv/">Conditions générales de vente</a><a href="/reglement-interieur/">Règlement intérieur</a><a href="/confidentialite/">Confidentialité</a></nav>
-    </div>
-  </div>
-</footer>
+  return <<<'HTML'
+<footer class="lp2-f"><div class="lp2-f-in"><div class="lp2-f-cols"><div class="lp2-f-id"><a class="lp2-f-brand" href="/" aria-label="Lead Performant, accueil"><svg width="44" height="44" viewBox="0 0 48 48" aria-hidden="true"><path d="M5.2 19.5 A19.4 19.4 0 0 1 42.8 19.5" fill="none" stroke="#C9A45C" stroke-width="2.4" stroke-linecap="round"></path><path d="M42.8 28.5 A19.4 19.4 0 0 1 5.2 28.5" fill="none" stroke="#F6F3EC" stroke-width="2.4" stroke-linecap="round"></path></svg><span>LEAD PERFORMANT</span></a><p class="lp2-f-sig">Parler pour convaincre.<br><span>Dialoguer pour apaiser.</span></p><p class="lp2-f-txt">Conseil et formation en art oratoire, leadership, médiation et gestion des conflits. Paris, Île-de-France, toute la France et à distance.</p><div class="lp2-f-contact"><a href="mailto:leadperformant@gmail.com">leadperformant@gmail.com</a><a href="tel:+33662579274">06 62 57 92 74</a></div></div><nav class="lp2-f-col" aria-label="Pôle Art oratoire et leadership"><p>I · Art oratoire et leadership</p><a href="/formations/eloquence-elite/">Éloquence Élite</a><a href="/formations/eloquence-levier-professionnel/">L'Éloquence comme levier professionnel</a><a href="/formations/parole-d-impact/">Parole d'Impact</a><a href="/formations/leadership-relationnel/">Leadership relationnel et mobilisation</a><a href="/formations/leadership-strategique/">Leadership stratégique et situations complexes</a><a href="/calendrier/">Calendrier des sessions</a></nav><nav class="lp2-f-col" aria-label="Pôle Médiation et gestion des conflits"><p>II · Médiation et gestion des conflits</p><a href="/mediation-gestion-des-conflits/#offres">Boussole relationnelle</a><a href="/mediation-gestion-des-conflits/#offres">L'Art du Désamorçage</a><a href="/mediation-gestion-des-conflits/#offres">Alliance Durable</a><a href="/mediation-gestion-des-conflits/#expertises">Médiation professionnelle et institutionnelle</a><a href="/mediation-gestion-des-conflits/#formations">Formations CNV et gestion des conflits</a><a href="/mediation-gestion-des-conflits/boussole-relationnelle/">Faire le point en ligne</a></nav><nav class="lp2-f-col lp2-f-narrow" aria-label="Lead Performant"><p>Lead Performant</p><a href="/interventions/">Interventions et médias</a><a href="/ressources/">Ressources</a><a href="/fondateur/">Le fondateur</a><a href="/boutique/">Boutique</a><a class="lp2-strong" href="/contact/">Demander un échange</a></nav></div><div class="lp2-f-legal"><p>© 2026 Lead Performant · Abdou FLEUR, entrepreneur individuel · TVA non applicable, article 293 B du CGI</p><ul><li><a href="/mentions-legales/">Mentions légales</a></li><li><a href="/confidentialite/">Confidentialité</a></li><li><a href="/cgv/">Conditions générales de vente</a></li><li><a href="/reglement-interieur/">Règlement intérieur</a></li><li><a href="/gestion/" rel="nofollow">Espace de gestion</a></li></ul></div></div></footer>
 HTML;
 }
 
@@ -57,17 +23,17 @@ function page_start(string $title, string $description, string $actif = '', bool
     . ($index ? '' : '<meta name="robots" content="noindex, nofollow">')
     . ($canonical ? '<link rel="canonical" href="' . h(url($canonical)) . '">' : '')
     . '<meta property="og:type" content="website"><meta property="og:locale" content="fr_FR"><meta property="og:site_name" content="Lead Performant"><meta property="og:title" content="' . h($title) . '"><meta property="og:description" content="' . h($description) . '"><meta property="og:image" content="' . h(url('/assets/img/partage-lead-performant.jpg')) . '">'
-    . '<meta name="theme-color" content="#21406A"><link rel="icon" type="image/png" href="/assets/img/favicon-lead-performant.png">'
-    . '<link rel="preload" href="/assets/lp/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>'
-    . '<link rel="preload" href="/assets/lp/fonts/manrope-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>'
-    . '<link rel="stylesheet" href="/assets/lp/site.css?v=20261113"><link rel="stylesheet" href="/assets/lp/plateforme.css?v=1">'
+    . '<meta name="theme-color" content="#0B1A33"><link rel="icon" type="image/png" href="/assets/img/favicon-lead-performant.png">'
+    . '<link rel="preload" href="/assets/lp/fonts/newsreader-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>'
+    . '<link rel="preload" href="/assets/lp/fonts/instrument-sans-wght-normal.woff2" as="font" type="font/woff2" crossorigin>'
+    . '<link rel="stylesheet" href="/assets/lp/site.css?v=20261120c"><link rel="stylesheet" href="/assets/lp/plateforme.css?v=1">'
     . ($jsonld ? '<script type="application/ld+json">' . $jsonld . '</script>' : '')
     . '</head><body><a class="skip" href="#contenu">Aller au contenu</a>' . nav_html($actif) . '<main id="contenu">';
 }
 function page_end(): void {
   echo '</main>' . footer_html() . '<div class="toast" id="toast" role="status" aria-live="polite"></div>'
     . '<script>window.LP=window.LP||{"contact":"/contact/","base":"/","site":"' . h(url('/')) . '","mode":"prod","preview":false,"single":false,"programmes":{}};</script>'
-    . '<script src="/assets/lp/site.js?v=20261113" defer></script></body></html>';
+    . '<script src="/assets/lp/site.js?v=20261120c" defer></script></body></html>';
   taches_opportunistes();
 }
 /* Filet de sécurité : si le planificateur n'a pas tourné depuis 15 minutes, les tâches s'exécutent après l'envoi de la page. */
