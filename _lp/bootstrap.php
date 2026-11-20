@@ -25,6 +25,8 @@ require __DIR__ . '/domain.php';
 require __DIR__ . '/documents.php';
 require __DIR__ . '/emails.php';
 require __DIR__ . '/layout.php';
+require __DIR__ . '/academie.php';
+require __DIR__ . '/references.php';
 
 /* ---------- Utilitaires ---------- */
 function h($s): string { return htmlspecialchars((string)$s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); }

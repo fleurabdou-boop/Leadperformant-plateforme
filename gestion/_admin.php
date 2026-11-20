@@ -59,7 +59,7 @@ function a_head(string $title): void {
   echo '<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>' . h($title) . ' · Gestion Lead Performant</title><meta name="robots" content="noindex,nofollow">'
     . '<link rel="icon" href="/assets/img/favicon-lead-performant.png"><link rel="stylesheet" href="/gestion/gestion.css?v=1"></head><body>';
 }
-const A_MENU = ['accueil' => 'Accueil', 'sessions' => 'Sessions', 'programmes' => 'Programmes', 'inscriptions' => 'Inscrits', 'paiements' => 'Paiements et factures', 'boutique' => 'Boutique', 'commandes' => 'Commandes et conseils', 'enquetes' => 'Enquêtes', 'courriels' => 'Courriels', 'exports' => 'Exports et BPF', 'parametres' => 'Paramètres'];
+const A_MENU = ['accueil' => 'Accueil', 'sessions' => 'Sessions', 'programmes' => 'Programmes', 'inscriptions' => 'Inscrits', 'academie' => 'Académie', 'paiements' => 'Paiements et factures', 'boutique' => 'Boutique', 'commandes' => 'Commandes et conseils', 'enquetes' => 'Enquêtes', 'references' => 'Références et témoignages', 'courriels' => 'Courriels', 'exports' => 'Exports et BPF', 'parametres' => 'Paramètres'];
 function a_layout_start(string $title, string $actif): void {
   a_head($title);
   echo '<div class="g-app"><aside class="g-side"><a class="g-brand" href="/gestion/"><img src="/assets/img/embleme-lead-performant.png" alt="" width="34" height="33"><span>LEAD PERFORMANT<small>Gestion</small></span></a><nav aria-label="Rubriques">';

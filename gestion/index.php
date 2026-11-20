@@ -10,6 +10,8 @@ $act = post('a', 40);
 
 try {
 /* ================= Actions ================= */
+if ($P && str_starts_with($v, 'academie')) { require_once __DIR__ . '/academie.php'; academie_admin_actions($v, $act, $id); a_go('v=' . $v . ($id ? '&id=' . $id : '')); }
+if ($P && str_starts_with($v, 'reference')) { require_once __DIR__ . '/references.php'; try { refs_admin_actions($v, $act, $id); } catch (DomainException $e) { a_flash($e->getMessage()); } a_go('v=' . $v . ($id ? '&id=' . $id : '')); }
 if ($P) switch ($v . ':' . $act) {
   case 'logout:': session_destroy(); redirect('/gestion/');
 
@@ -171,6 +173,8 @@ $progs = db_all('SELECT * FROM programmes ORDER BY numero');
 $progNom = array_column($progs, 'titre', 'id');
 $slib = fn($s) => h(($progNom[$s['programme_id']] ?? '') . ' · ' . date('d/m/Y', ts($s['date_debut'])));
 
+if (str_starts_with($v, 'academie')) { require_once __DIR__ . '/academie.php'; academie_admin_vues($v, $id); exit; }
+if (str_starts_with($v, 'reference')) { require_once __DIR__ . '/references.php'; refs_admin_vues($v, $id); exit; }
 switch ($v) {
 case 'accueil':
   $m = preg_match('/^\d{4}-\d{2}$/', get('m')) ? get('m') : date('Y-m');
@@ -195,6 +199,7 @@ case 'accueil':
   foreach (db_all("SELECT e.* FROM echeances e WHERE e.statut='attendue' AND e.mode='virement'") as $e) $alertes[] = ['ambre', 'Virement attendu : ' . $e['libelle'] . ' · ' . eur((int)$e['montant']), 'v=inscription&id=' . $e['inscription_id']];
   foreach (db_all("SELECT * FROM echeances WHERE statut='expiree' AND inscription_id IS NOT NULL ORDER BY id DESC LIMIT 5") as $e) $alertes[] = ['ambre', 'Paiement non effectué : ' . $e['libelle'], 'v=inscription&id=' . $e['inscription_id']];
   foreach (db_all("SELECT c.*, p.titre FROM commandes c JOIN produits p ON p.id=c.produit_id WHERE p.type='ecrit' AND c.statut='payee' AND c.question_at IS NOT NULL AND c.reponse_at IS NULL") as $c) $alertes[] = ['bleu', 'Conseil écrit à rendre : ' . $c['titre'] . ' (question du ' . date('d/m', ts($c['question_at'])) . ')', 'v=commande&id=' . $c['id']];
+  foreach (db_all("SELECT id, auteur, organisation FROM ref_temoignages WHERE etat='a_valider' ORDER BY id") as $t) $alertes[] = ['bleu', 'Témoignage reçu à valider : ' . ($t['auteur'] ?: ($t['organisation'] ?: 'auteur non indiqué')), 'v=reference_temoignage&id=' . $t['id']];
   foreach (db_all("SELECT * FROM courriels WHERE statut='echec' ORDER BY id DESC LIMIT 3") as $c) $alertes[] = ['rouge', 'Courriel non remis : ' . $c['sujet'] . ' → ' . $c['destinataire'], 'v=courriels'];
   a_layout_start('Accueil', 'accueil');
   $pm = date('Y-m', strtotime($m . '-01 -1 month')); $nm = date('Y-m', strtotime($m . '-01 +1 month'));
@@ -227,7 +232,7 @@ case 'session':
   $s = $id ? session_get($id) : null;
   a_layout_start($s ? 'Session' : 'Nouvelle session', 'sessions');
   $sv = $s ?? ['programme_id' => $progs[0]['id'] ?? 0, 'date_debut' => '', 'date_fin' => '', 'heure_debut' => '09:00', 'heure_fin' => '17:00', 'modalite' => 'presentiel', 'lieu' => param('parole_lieu_defaut'), 'lien_visio' => '', 'capacite' => 15, 'seuil' => 7, 'prix_particulier' => 0, 'etat' => 'brouillon', 'note' => ''];
-  echo '<div class="g-head"><h1 class="g-h1">' . ($s ? $slib($s) : 'Nouvelle session') . '</h1>' . ($s ? '<div class="g-actions"><a class="g-btn g-ghost" href="/sessions/' . h($s['slug']) . '/" target="_blank" rel="noopener">Voir la page publique</a><a class="g-btn g-ghost" href="?v=csv_session&id=' . $id . '">Exporter les inscrits</a></div>' : '') . '</div>';
+  echo '<div class="g-head"><h1 class="g-h1">' . ($s ? $slib($s) : 'Nouvelle session') . '</h1>' . ($s ? '<div class="g-actions"><a class="g-btn g-ghost" href="/sessions/' . h($s['slug']) . '/" target="_blank" rel="noopener">Voir la page publique</a><a class="g-btn g-ghost" href="?v=academie_session&id=' . $id . '">Académie</a><a class="g-btn g-ghost" href="?v=academie_session&id=' . $id . '">Académie</a><a class="g-btn g-ghost" href="?v=csv_session&id=' . $id . '">Exporter les inscrits</a></div>' : '') . '</div>';
   if ($s) { $vv = session_view($s); echo '<div class="g-kpis"><div class="g-kpi"><span>Confirmés</span><strong>' . places_confirmees($id) . '</strong></div><div class="g-kpi"><span>Contrats signés</span><strong>' . places_signees($id) . '</strong><small>seuil ' . (int)$s['seuil'] . '</small></div><div class="g-kpi"><span>Places engagées</span><strong>' . $vv['engagees'] . ' / ' . $s['capacite'] . '</strong></div><div class="g-kpi"><span>Statut public</span><strong style="font-size:1.1rem">' . h($vv['statut']) . '</strong><small>J' . ($vv['jours'] >= 0 ? '-' : '+') . abs($vv['jours']) . '</small></div></div>'; }
   $popts = array_column($progs, 'titre', 'id');
   echo '<section class="g-card"><h2 class="g-h2">Paramètres de la session</h2><form method="post" class="g-grid">' . a_field() . '<input type="hidden" name="a" value="save">'

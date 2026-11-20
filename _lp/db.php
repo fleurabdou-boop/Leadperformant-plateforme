@@ -104,10 +104,35 @@ function db_migrate(): void {
     "CREATE INDEX i_vues ON vues(jour, page)",
   ];
 
+  /* Lead Performant Académie : accès, liens et sessions de connexion, ressources, consultations. */
+  $steps[2] = [
+    "CREATE TABLE IF NOT EXISTS academie_acces (id $pk, email VARCHAR(190) NOT NULL, nom VARCHAR(200), inscription_id INT NOT NULL, session_id INT NOT NULL,
+      ouvert_at DATETIME, fin_at DATETIME, origine VARCHAR(12) DEFAULT 'auto', apres_force INT DEFAULT 0, retire_at DATETIME NULL, motif VARCHAR(300),
+      rappel_fin_at DATETIME NULL, created_at DATETIME, UNIQUE (inscription_id, email))$eng",
+    "CREATE TABLE IF NOT EXISTS academie_liens (id $pk, email VARCHAR(190) NOT NULL, type VARCHAR(12) NOT NULL, hash VARCHAR(64) NOT NULL UNIQUE,
+      expire_at DATETIME NOT NULL, utilise_at DATETIME NULL, created_at DATETIME, ip VARCHAR(64))$eng",
+    "CREATE TABLE IF NOT EXISTS academie_ressources (id $pk, programme_id INT NULL, session_id INT NULL, temps VARCHAR(8) NOT NULL, type VARCHAR(8) NOT NULL,
+      titre VARCHAR(200), description $txt, fichier VARCHAR(255), url VARCHAR(500), ordre INT DEFAULT 0, publie INT DEFAULT 0, created_at DATETIME, updated_at DATETIME)$eng",
+    "CREATE TABLE IF NOT EXISTS academie_consultations (id $pk, acces_id INT NOT NULL, ressource_id INT NOT NULL, premiere_at DATETIME, derniere_at DATETIME,
+      n INT DEFAULT 1, UNIQUE (acces_id, ressource_id))$eng",
+  ];
+
+  /* Références et témoignages (novembre 2026) : logos des organisations et témoignages publiés sur le site. */
+  $steps[3] = [
+    "CREATE TABLE IF NOT EXISTS ref_logos (id $pk, nom VARCHAR(200) NOT NULL, categorie VARCHAR(20), pole VARCHAR(8) DEFAULT 'tous',
+      fichier VARCHAR(120), largeur INT DEFAULT 0, hauteur INT DEFAULT 0, fond VARCHAR(8) DEFAULT 'clair', lien VARCHAR(300),
+      accord INT DEFAULT 0, ordre INT DEFAULT 0, publie INT DEFAULT 0, created_at DATETIME, updated_at DATETIME)$eng",
+    "CREATE TABLE IF NOT EXISTS ref_temoignages (id $pk, texte $txt, auteur VARCHAR(160), fonction VARCHAR(200), organisation VARCHAR(200),
+      affichage VARCHAR(12) DEFAULT 'complet', contexte VARCHAR(200), pole VARCHAR(8) DEFAULT 'tous', date_temoignage DATE NULL,
+      une INT DEFAULT 0, ordre INT DEFAULT 0, etat VARCHAR(12) DEFAULT 'a_valider', accord VARCHAR(16) DEFAULT '', accord_at DATE NULL,
+      email VARCHAR(190), origine VARCHAR(8) DEFAULT 'admin', ip VARCHAR(64), created_at DATETIME, updated_at DATETIME)$eng",
+  ];
+
   foreach ($steps as $v => $sqls) {
     if ($v <= $version) continue;
     foreach ($sqls as $sql) $pdo->exec($sql);
     if ($v === 1) db_seed();
+    if ($v === 2) academie_seed();
     db_exec(db_is_sqlite() ? "INSERT OR REPLACE INTO meta(k,v) VALUES('schema',?)" : "REPLACE INTO meta(k,v) VALUES('schema',?)", [(string)$v]);
   }
 }
