@@ -167,7 +167,9 @@ a = lay.index("function nav_html(")
 b = lay.index("function page_start(")
 new_funcs = ("function nav_html(string $actif = ''): string {\n"
              "  // en-tête commun de la maison mère à deux pôles (novembre 2026)\n"
-             "  return <<<'HTML'\n" + header("") + "\nHTML;\n}\n\n"
+             "  $html = <<<'HTML'\n" + header("") + "\nHTML;\n"
+             "  $k = ['calendrier' => 'sessions', 'sessions' => 'sessions', 'inscription' => 'sessions', 'boutique' => 'boutique'][$actif] ?? '';\n"
+             "  return $k === '' ? $html : str_replace('data-k=\"' . $k . '\"', 'data-k=\"' . $k . '\" aria-current=\"page\"', $html);\n}\n\n"
              "function footer_html(): string {\n  return <<<'HTML'\n" + footer() + "\nHTML;\n}\n\n")
 lay2 = lay[:a] + new_funcs + lay[b:]
 reps = [("/* Gabarit des pages publiques : reprend l'en-tête, le menu et le pied de page du site existant (mêmes feuilles de style et scripts). */",

@@ -14,7 +14,9 @@
   /* ------------------------------------------------ En-tête et pied de page des pages existantes */
   function activeKey(p) {
     if (/^\/(mediation-gestion-des-conflits)\//.test(p)) return "pole2";
-    if (/^\/(art-oratoire-leadership|art-oratoire|leadership|formations|entreprises|ecoles|collectivites-institutions|calendrier|sessions|inscription)\b/.test(p) || /^\/laboratoire\.html/.test(p)) return "pole1";
+    if (/^\/(art-oratoire-leadership|art-oratoire|leadership|formations|entreprises|ecoles|collectivites-institutions)\b/.test(p) || /^\/laboratoire\.html/.test(p)) return "pole1";
+    if (/^\/(calendrier|sessions|inscription|convention|paiement)\b/.test(p)) return "sessions";
+    if (/^\/boutique\b/.test(p)) return "boutique";
     if (/^\/interventions\//.test(p)) return "interventions";
     if (/^\/ressources\//.test(p)) return "ressources";
     if (/^\/fondateur\//.test(p)) return "fondateur";

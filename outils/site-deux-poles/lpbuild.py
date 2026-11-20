@@ -13,7 +13,7 @@ LIVE = ROOT / "live"
 OUT = ROOT / "leadperformant-plateforme/refonte"
 S2 = ROOT / "site2"
 SITE = "https://www.leadperformant.com"
-V = "20261120c"
+V = "20261120d"
 EMAIL = "leadperformant@gmail.com"
 TEL, TELH = "06 62 57 92 74", "tel:+33662579274"
 NB = " "
@@ -98,19 +98,25 @@ NAV = [("pole1", "Art oratoire et leadership", "/art-oratoire-leadership/"),
        ("pole2", "Médiation et gestion des conflits", "/mediation-gestion-des-conflits/"),
        ("interventions", "Interventions et médias", "/interventions/"),
        ("ressources", "Ressources", "/ressources/"),
-       ("fondateur", "Le fondateur", "/fondateur/")]
+       ("fondateur", "Le fondateur", "/fondateur/"),
+       ("sessions", "Sessions et inscriptions", "/calendrier/"),
+       ("boutique", "Boutique", "/boutique/")]
+ROMAN = {"pole1": "I", "pole2": "II"}
 LOGO = ('<svg width="{s}" height="{s}" viewBox="0 0 48 48" aria-hidden="true"><path d="M5.2 19.5 A19.4 19.4 0 0 1 42.8 19.5" fill="none" stroke="#C9A45C" stroke-width="{w}" stroke-linecap="round"></path>'
         '<path d="M42.8 28.5 A19.4 19.4 0 0 1 5.2 28.5" fill="none" stroke="#F6F3EC" stroke-width="{w}" stroke-linecap="round"></path></svg>')
 
 def header(active=""):
     cur = lambda k: ' aria-current="page"' if k == active else ""
-    items = "".join(f'<li><a href="{h}" data-k="{k}"{cur(k)}>{l}</a></li>' for k, l, h in NAV)
-    mitems = "".join(f'<li><a href="{h}" data-k="{k}"{cur(k)}>{l}<span aria-hidden="true">→</span></a></li>' for k, l, h in NAV)
+    def lab(k, l):
+        return (f'<span class="lp2-pole-n" aria-hidden="true">{ROMAN[k]}</span><span class="lp2-pole-l">{l}</span>' if k in ROMAN else l)
+    cls = lambda k: ' class="lp2-pole"' if k in ROMAN else ""
+    items = "".join(f'<li{cls(k)}><a href="{h}" data-k="{k}"{cur(k)}>{lab(k, l)}</a></li>' for k, l, h in NAV)
+    mitems = "".join(f'<li{cls(k)}><a href="{h}" data-k="{k}"{cur(k)}>{lab(k, l)}<span class="lp2-arr" aria-hidden="true">→</span></a></li>' for k, l, h in NAV)
     return (
         '<header class="lp2-h" id="top">'
         '<div class="lp2-bar">'
         f'<a class="lp2-brand" href="/" aria-label="Lead Performant, accueil">{LOGO.format(s=38, w=2.6)}'
-        '<span class="lp2-brand-t"><span class="lp2-brand-n">LEAD PERFORMANT</span><span class="lp2-brand-s"><span>Parler pour convaincre.</span> <span>Dialoguer pour apaiser.</span></span></span></a>'
+        '<span class="lp2-brand-t"><span class="lp2-brand-n">LEAD PERFORMANT</span><span class="lp2-brand-s"><span>Parler pour convaincre.</span><span>Dialoguer pour apaiser.</span></span></span></a>'
         '<div class="lp2-act">'
         f'<a class="lp2-tel" href="{TELH}">{TEL.replace(" ", NB)}</a>'
         '<a class="lp2-cta" href="/contact/">Demander un échange</a>'
