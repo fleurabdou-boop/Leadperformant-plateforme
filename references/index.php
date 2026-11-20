@@ -53,7 +53,7 @@ if (empty($_SESSION['refs_t'])) $_SESSION['refs_t'] = time();
 $ld = json_encode(['@context' => 'https://schema.org', '@type' => 'BreadcrumbList', 'itemListElement' => [
   ['@type' => 'ListItem', 'position' => 1, 'name' => 'Accueil', 'item' => url('/')],
   ['@type' => 'ListItem', 'position' => 2, 'name' => 'Références et témoignages', 'item' => url('/references/')]]], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG);
-page_start('Références et témoignages', 'Les organisations qui ont confié à Lead Performant une formation, une intervention ou une médiation, et les témoignages de celles et ceux qui les ont suivies.', 'references', $aContenu, '/references/', $ld);
+page_start('Références et témoignages', 'Les organisations qui ont confié à Lead Performant une formation, une intervention ou une médiation, et les témoignages de celles et ceux qui les ont suivies.', 'references', true, '/references/', $ld);
 
 $btnOn = 'min-height: 44px; padding: 0 18px; font-family: inherit; font-size: 14px; cursor: pointer; border: 1px solid #0B1A33; background: #0B1A33; color: #F6F3EC';
 $btnOff = 'min-height: 44px; padding: 0 18px; font-family: inherit; font-size: 14px; cursor: pointer; border: 1px solid #CFC5B1; background: transparent; color: #0B1A33';

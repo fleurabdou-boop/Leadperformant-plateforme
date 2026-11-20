@@ -118,3 +118,8 @@ ul.lpr-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-column
 .lpr-merci p,.lpx .lpr-merci p{margin:0;font-size:16px;line-height:1.65;color:#384256}
 .lpr-merci a{align-self:flex-start;color:#0B1A33;display:inline-flex;gap:10px;min-height:44px;align-items:center;text-decoration:none}
 @media (prefers-reduced-motion:reduce){.lp2-svc a,.lp2-svcbar a,.lpr-strip img,.lpr-grid img{transition:none}}
+.lpr-vide{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px 48px;padding:36px clamp(24px,4vw,48px);background:#FFFFFF;border:1px solid #E3DCCD;position:relative}
+.lpr-vide::before{content:"";position:absolute;left:-1px;top:-1px;width:56px;height:2px;background:#C9A45C}
+.lpr-vide p,.lpx .lpr-vide p{margin:0;flex:1 1 420px;font-family:var(--serif);font-size:clamp(19px,1.6vw,22px);line-height:1.5;color:#0B1A33;max-width:720px}
+a.lpr-vide-btn{display:inline-flex;align-items:center;gap:14px;min-height:56px;padding:0 30px;background:#0B1A33;color:#F6F3EC;text-decoration:none;font-size:16px;font-weight:500}
+a.lpr-vide-btn span{color:#C9A45C}
