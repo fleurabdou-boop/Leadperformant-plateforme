@@ -1,0 +1,9 @@
+# Les fichiers déposés ne peuvent jamais être exécutés ni listés
+<FilesMatch "\.(php|php[0-9]|phtml|phar|pl|py|cgi|sh|htaccess|html?|svg|js)$">
+Require all denied
+</FilesMatch>
+Options -ExecCGI -Indexes
+<IfModule mod_headers.c>
+Header always set X-Content-Type-Options "nosniff"
+Header always set Content-Security-Policy "default-src 'none'; img-src 'self'; style-src 'none'"
+</IfModule>
